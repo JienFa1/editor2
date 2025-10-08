@@ -1,0 +1,32 @@
+﻿mở cổng: npx localtunnel --port 9000 
+
+Invoke-RestMethod -Uri "/upload" -Method Post -Form @{
+    file = Get-Item ""
+}
+
+Invoke-RestMethod -Method Post -Uri /clear-document
+
+$body = @{ docx_path = "" } | ConvertTo-Json
+$response = Invoke-RestMethod -Uri "http://127.0.0.1:8000/process" -Method Post -Body $body -ContentType "application/json"
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+$raw    = $response
+$latin1 = [System.Text.Encoding]::GetEncoding("latin1")
+$fixed  = [System.Text.Encoding]::UTF8.GetString($latin1.GetBytes($raw))
+$path   = "C:\Users\TRUYENTHONG\Desktop\finetune\result_final_text.txt"
+$utf8Bom = New-Object System.Text.UTF8Encoding($true)
+[System.IO.File]::WriteAllText($path, $fixed, $utf8Bom)
+code $path   # mở ngay trong VS Code
+
+
+$response = Invoke-RestMethod -Uri "http://127.0.0.1:8000/process/default" -Method Post
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+$finalText = $response.final_text
+$latin1 = [System.Text.Encoding]::GetEncoding("latin1")
+$fixed  = [System.Text.Encoding]::UTF8.GetString($latin1.GetBytes($finalText))
+$path    = "C:\Users\TRUYENTHONG\Desktop\finetune\result_final_text.txt"
+$utf8Bom = New-Object System.Text.UTF8Encoding($true)
+[System.IO.File]::WriteAllText($path, $fixed, $utf8Bom)
+code $path
+
+
+Invoke-RestMethod -Uri "https://ripe-stars-win.loca.lt/process/default" -Method Post
