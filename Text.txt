@@ -1,6 +1,6 @@
 ﻿mở cổng: npx localtunnel --port 9000 
 
-Invoke-RestMethod -Uri "/upload" -Method Post -Form @{
+Invoke-RestMethod -Uri "https://cool-papers-draw.loca.lt/upload" -Method Post -Form @{
     file = Get-Item ""
 }
 
@@ -21,12 +21,14 @@ code $path   # mở ngay trong VS Code
 $response = Invoke-RestMethod -Uri "http://127.0.0.1:8000/process/default" -Method Post
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 $finalText = $response.final_text
-$latin1 = [System.Text.Encoding]::GetEncoding("latin1")
-$fixed  = [System.Text.Encoding]::UTF8.GetString($latin1.GetBytes($finalText))
-$path    = "C:\Users\TRUYENTHONG\Desktop\finetune\result_final_text.txt"
+$path    = "C:\Users\TRUYENTHONG\Desktop\finetune\fixed.txt"
 $utf8Bom = New-Object System.Text.UTF8Encoding($true)
-[System.IO.File]::WriteAllText($path, $fixed, $utf8Bom)
+[System.IO.File]::WriteAllText($path, $finalText, $utf8Bom)
 code $path
 
+final 
 
-Invoke-RestMethod -Uri "https://ripe-stars-win.loca.lt/process/default" -Method Post
+$resp = Invoke-RestMethod -Uri "https://qld-juan-none-sheer.trycloudflare.com/process/default_async" -Method POST
+$job = $resp.job_id
+Invoke-RestMethod -Uri "/result/$job/text" -Method GET
+

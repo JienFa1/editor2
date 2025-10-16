@@ -3,8 +3,9 @@ import sys
 sys.stdout.reconfigure(encoding="utf-8")
 sys.stderr.reconfigure(encoding="utf-8") 
 
+import os, json, uuid, time
 from typing import Optional, List
-from fastapi import FastAPI, HTTPException, Response
+from fastapi import FastAPI, HTTPException, BackgroundTasks, Response
 from pydantic import BaseModel, Field
 import uvicorn
 
@@ -70,7 +71,6 @@ def _make_llm_from_Config():
 
 
 def _run_pipeline(big_text: Optional[str], docx_path: Optional[str]) -> ProcessResponse:
-    """Shared pipeline runner for both GET and POST requests."""
     if big_text and big_text.strip():
         working_text = big_text.strip()
     elif docx_path and docx_path.strip():
@@ -109,6 +109,23 @@ def _run_pipeline(big_text: Optional[str], docx_path: Optional[str]) -> ProcessR
     ]
     return ProcessResponse(final_text=final_text, audit=audit)
 
+# ================= Background job ================ #
+def run_default_pipeline_and_save(job_id: str):
+    try:
+        start = time.time()
+        default_doc = getattr(Config, "DOCUMENT", "").strip()
+        if not default_doc:
+            raise Exception("Config.DOCUMENT chưa được cấu hình.")
+        result = _run_pipeline(None, default_doc)
+        elapsed = round(time.time() - start, 2)
+        data = {"status": "done", "elapsed_sec": elapsed, "result": result.dict()}
+    except Exception as e:
+        data = {"status": "error", "message": str(e)}
+
+    os.makedirs("jobs", exist_ok=True)
+    with open(f"jobs/{job_id}.json", "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+
 # ====== Endpoints ======
 @app.get("/", include_in_schema=False)
 def read_root():
@@ -135,6 +152,43 @@ def process_default():
         raise HTTPException(status_code=400, detail="Config.DOCUMENT chua duoc cau hinh.")
     response = _run_pipeline(None, default_doc)
     return ProcessTextResponse(final_text=response.final_text)
+
+
+@app.post("/process/default_async")
+def process_default_async(background_tasks: BackgroundTasks):
+    default_doc = getattr(Config, "DOCUMENT", "").strip()
+    if not default_doc:
+        raise HTTPException(status_code=400, detail="Config.DOCUMENT chưa được cấu hình.")
+
+    job_id = str(uuid.uuid4())
+    background_tasks.add_task(run_default_pipeline_and_save, job_id)
+    return {"job_id": job_id, "status": "processing"}
+
+@app.get("/result/{job_id}")
+def get_result(job_id: str):
+    path = f"jobs/{job_id}.json"
+    if not os.path.exists(path):
+        return {"status": "processing"}
+    with open(path, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+
+@app.get("/result/{job_id}/text")
+def get_result_text(job_id: str):
+    path = f"jobs/{job_id}.json"
+    if not os.path.exists(path):
+        return Response(content="processing", media_type="text/plain", status_code=202)
+    with open(path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    status = data.get("status")
+    if status != "done":
+        message = data.get("message", "")
+        content = message or status or "error"
+        http_code = 500 if status == "error" else 202
+        return Response(content=content, media_type="text/plain", status_code=http_code)
+    result = data.get("result") or {}
+    final_text = result.get("final_text", "")
+    return Response(content=str(final_text), media_type="text/plain")
 
 
 #  python api.py
