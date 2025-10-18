@@ -1,6 +1,7 @@
-﻿mở cổng: npx localtunnel --port 9000 
+﻿cloudflared tunnel --url http://localhost:8000
 
-Invoke-RestMethod -Uri "https://cool-papers-draw.loca.lt/upload" -Method Post -Form @{
+
+Invoke-RestMethod -Uri "https://services-distance-still-coverage.trycloudflare.com/upload" -Method Post -Form @{
     file = Get-Item ""
 }
 

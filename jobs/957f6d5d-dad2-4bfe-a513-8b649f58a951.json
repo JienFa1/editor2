@@ -1,4 +1,0 @@
-{
-  "status": "error",
-  "message": "500: Loi khi xu ly pipeline: compose.global_prompt_order is missing IDs: ['EP_END_THANH_LE_AIM']"
-}

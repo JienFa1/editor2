@@ -1,0 +1,128 @@
+{
+  "status": "done",
+  "elapsed_sec": 3570.63,
+  "result": {
+    "final_text": "LỄ TỔNG LÃNH THIÊN THẦN MICAE – BỔN MẠNG (GIÁO XỨ PHÚ LONG)\n\nChiều ngày 29.09.2025, Giáo khu Micae thuộc Giáo xứ Phú Long đã tổ chức Thánh lễ mừng kính Tổng lãnh Thiên Thần Micae - bổn mạng của Giáo khu Micae. Thánh lễ do cha chánh xứ Giuse Nguyễn Văn Thịnh, chủ sự. Ngoài ra còn có sự hiện diện của quý cha, quý tu sĩ và đông đảo cộng đồng giáo dân trong giáo khu và giáo xứ Phú Long tham dự.\n\nThánh lễ bắt đầu lúc 18g00, nghi thức mở đầu là rước kiệu Tổng Lãnh Thiên Thần Micae cùng đội kèn tây của giáo xứ vang rền, nhằm tôn kính và biểu thị sức mạnh chiến thắng sự dữ của ngài. Tổng Lãnh Thiên Thần Micae đã lãnh đạo các thiên thần khác chiến đấu với Lucifer với khẩu hiệu: \"Ai bằng Thiên Chúa?\"\n\nTrong bầu khí sốt sắng, cộng đoàn giáo xứ, đặc biệt là giáo dân Giáo khu Thánh Micae, cùng dâng lời tạ ơn Thiên Chúa, hiệp thông cầu nguyện và kính nhớ thánh quan thầy Micae cùng hai tổng lãnh thiên thần Gabriel và Rafael.\n\nTtsk-bg\n\nTrong bài giảng, Cha Đaminh Nguyễn Văn Lương - Hội Dòng Linh Mục Thánh Tâm Chúa Giêsu đã giải thích về thị kiến trong sách Khải huyền của thánh Gioan: trên trời diễn ra một cuộc giao chiến giữa hai bên. Một bên do Đức Micae lãnh đạo với khẩu hiệu \"Ai bằng Thiên Chúa?\" và bên kia là Luciphe cùng bè lũ theo hắn. \n\nChúng ta hãy noi gương Đức Micae, luôn trung thành với Chúa. Khi bị thế gian, xác thịt cám dỗ khiến chúng ta muốn xa lìa Người, hãy nhớ lại lời của Đức Micae: \"Ai bằng Thiên Chúa?\". Chính điều này giúp chúng ta nhận ra rằng không gì sánh được với quyền năng và tình yêu vô biên của Thiên Chúa.\n\nNgày 19 và 21 tháng 9 năm 2025, sau Thánh lễ mừng kính Tổng lãnh Thiên Thần Micae - bổn mạng Giáo khu Micae, cộng đoàn đã tham dự buổi tiệc liên hoan thân mật. Ban tổ chức đã trao giải thưởng cho các đội bóng tham dự giải bóng đá kỷ niệm sự kiện này.\n\nNgày lễ bổn mạng khép lại trong niềm vui hiệp thông, để lại dấu ấn đẹp về tình thân ái, gắn kết và tinh thần phục vụ trong cộng đồng giáo dân Giáo xứ Phú Long.\n\nThiếu nội dung để chỉnh sửa. Bạn vui lòng cung cấp đầy đủ thông tin hoặc đoạn văn cần được chỉnh sửa?",
+    "audit": [
+      {
+        "chunk_id": "C1+C2",
+        "order": 1,
+        "labels": [
+          "tittle"
+        ],
+        "edit_prompt_ids": [
+          "EP_TITTLE"
+        ],
+        "latency_ms": 191785
+      },
+      {
+        "chunk_id": "C3",
+        "order": 3,
+        "labels": [
+          "gioi_thieu_nhan_su"
+        ],
+        "edit_prompt_ids": [
+          "EP_PROFILE_HOI_DOAN_STRUC",
+          "EP_PROFILE_HOI_DOAN_TONE",
+          "EP_PROFILE_HOI_DOAN_WORD",
+          "EP_CHUAN_HOA",
+          "EP_PROFILE_ALL_AIM"
+        ],
+        "latency_ms": 573181
+      },
+      {
+        "chunk_id": "C4",
+        "order": 4,
+        "labels": [
+          "gioi_thieu_nhan_su"
+        ],
+        "edit_prompt_ids": [
+          "EP_PROFILE_HOI_DOAN_STRUC",
+          "EP_PROFILE_HOI_DOAN_TONE",
+          "EP_PROFILE_HOI_DOAN_WORD",
+          "EP_CHUAN_HOA",
+          "EP_PROFILE_ALL_AIM"
+        ],
+        "latency_ms": 520232
+      },
+      {
+        "chunk_id": "C5",
+        "order": 5,
+        "labels": [
+          "gioi_thieu_nhan_su"
+        ],
+        "edit_prompt_ids": [
+          "EP_PROFILE_HOI_DOAN_STRUC",
+          "EP_PROFILE_HOI_DOAN_TONE",
+          "EP_PROFILE_HOI_DOAN_WORD",
+          "EP_CHUAN_HOA",
+          "EP_PROFILE_ALL_AIM"
+        ],
+        "latency_ms": 351306
+      },
+      {
+        "chunk_id": "C6",
+        "order": 6,
+        "labels": [
+          "tuong_thuat_su_kien_bai_giang"
+        ],
+        "edit_prompt_ids": [
+          "EP_BAI_GIANG_STRUC",
+          "EP_BAI_GIANG_TONE",
+          "EP_BAI_GIANG_WORD",
+          "EP_BAI_GIANG_AIM",
+          "EP_CHUAN_HOA",
+          "EP_BAI_GIANG_CHECK"
+        ],
+        "latency_ms": 1030310
+      },
+      {
+        "chunk_id": "C7",
+        "order": 7,
+        "labels": [
+          "tuong_thuat_su_kien_ngoai_thanh_le"
+        ],
+        "edit_prompt_ids": [
+          "EP_REPORT_THANH_LE_STRUC",
+          "EP_REPORT_THANH_LE_TONE",
+          "EP_REPORT_THANH_LE_WORD",
+          "EP_REPORT_THANH_LE_AIM",
+          "EP_CHUAN_HOA",
+          "EP_REPORT_THANH_LE_CHECK"
+        ],
+        "latency_ms": 458981
+      },
+      {
+        "chunk_id": "C8",
+        "order": 8,
+        "labels": [
+          "tuong_thuat_su_kien_thanh_le"
+        ],
+        "edit_prompt_ids": [
+          "EP_REPORT_THANH_LE_STRUC",
+          "EP_REPORT_THANH_LE_TONE",
+          "EP_REPORT_THANH_LE_WORD",
+          "EP_REPORT_THANH_LE_AIM",
+          "EP_CHUAN_HOA",
+          "EP_REPORT_THANH_LE_CHECK"
+        ],
+        "latency_ms": 272384
+      },
+      {
+        "chunk_id": "C9",
+        "order": 9,
+        "labels": [
+          "gioi_thieu_nhan_su"
+        ],
+        "edit_prompt_ids": [
+          "EP_PROFILE_HOI_DOAN_STRUC",
+          "EP_PROFILE_HOI_DOAN_TONE",
+          "EP_PROFILE_HOI_DOAN_WORD",
+          "EP_CHUAN_HOA",
+          "EP_PROFILE_ALL_AIM"
+        ],
+        "latency_ms": 159542
+      }
+    ]
+  }
+}

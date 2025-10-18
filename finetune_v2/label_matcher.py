@@ -18,6 +18,7 @@ from typing import Iterable, List, Optional, Sequence, Tuple
 
 import faiss  # type: ignore
 import numpy as np
+import torch
 from sentence_transformers import SentenceTransformer
 
 
@@ -34,7 +35,39 @@ class SentenceTransformerEmbedder:
     """SentenceTransformer wrapper that always returns normalized vectors."""
 
     def __init__(self, model_name: str, *, device: Optional[str] = None):
-        self.model = SentenceTransformer(model_name, device=device)
+        resolved_device = self._resolve_device(device)
+        self.device = resolved_device
+        try:
+            self.model = SentenceTransformer(model_name, device=resolved_device)
+        except RuntimeError as exc:
+            if resolved_device != "cpu":
+                print(
+                    f"[label_matcher] Không thể khởi tạo model ở thiết bị '{resolved_device}': {exc}. "
+                    "Fallback về CPU."
+                )
+                self.device = "cpu"
+                self.model = SentenceTransformer(model_name, device="cpu")
+            else:
+                raise
+
+    @staticmethod
+    def _resolve_device(requested: Optional[str]) -> str:
+        """Chọn thiết bị hợp lệ; fallback sang CPU nếu CUDA không sẵn sàng."""
+        if requested is None:
+            return "cuda" if torch.cuda.is_available() else "cpu"
+
+        normalized = requested.strip().lower()
+        if not normalized or normalized == "auto":
+            return "cuda" if torch.cuda.is_available() else "cpu"
+
+        if normalized == "gpu":
+            normalized = "cuda"
+
+        if normalized == "cuda" and not torch.cuda.is_available():
+            print("[label_matcher] CUDA được yêu cầu nhưng không phát hiện GPU; dùng CPU.")
+            return "cpu"
+
+        return normalized
 
     def encode(self, texts: Sequence[str]) -> np.ndarray:
         embeddings = self.model.encode(
@@ -191,4 +224,3 @@ def save_index(
     }
     with metadata_path.open("w", encoding="utf-8") as f:
         json.dump(meta_payload, f, ensure_ascii=False, indent=2)
-

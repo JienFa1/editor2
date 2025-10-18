@@ -1,0 +1,24 @@
+{
+  "status": "done",
+  "elapsed_sec": 999.16,
+  "result": {
+    "final_text": "Ngày 05/10/2025, tại giáo xứ Phong Cốc, giáo hạt Tây Ninh, cộng đoàn dân Chúa đã long trọng cử hành Thánh lễ khai mạc Tuần cửu nhật Tạ ơn hướng tới kỷ niệm 60 năm thành lập giáo phận Phú Cường (14/10/1965 - 14/10/2025). Bầu không khí linh thiêng và tràn đầy hồng ân đã bao phủ toàn bộ thánh đường, trở thành lời cầu nguyện tạ ơn Thiên Chúa.",
+    "audit": [
+      {
+        "chunk_id": "C1",
+        "order": 1,
+        "labels": [
+          "mo_bai_tom_tat_thanh_le"
+        ],
+        "edit_prompt_ids": [
+          "EP_STRUC_LEAD",
+          "EP_LEAD_HOI_DOAN_TONE",
+          "EP_LEAD_HOI_DOAN_WORD",
+          "EP_LEAD_HOI_DOAN_AIM",
+          "EP_CHUAN_HOA"
+        ],
+        "latency_ms": 991230
+      }
+    ]
+  }
+}

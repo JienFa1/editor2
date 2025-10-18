@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "embedding_dim": 1024,
+  "labels": [
+    {
+      "name": "tiêu đề",
+      "description": "MỪNG LỄ KÍNH THÁNH AUGUSTINÔ - BỔN MẠNG GIỚI TRẺ GIÁO XỨ VĨNH HOÀ"
+    },
+    {
+      "name": "mở bài (LEAD tin tức mục vụ) - Thánh Lễ",
+      "description": "Uyên Hưng – Chúa Nhật, ngày 05.10.2025 – Hòa cùng niềm vui của Giáo Hội trong ngày kính trọng thể Đức Mẹ Mân Côi, Ca đoàn Giáo điểm Uyên Hưng long trọng mừng lễ Thánh Faustina, vị thánh được chọn làm quan thầy của ca đoàn, trong tâm tình tạ ơn và hiệp thông sâu sắc."
+    },
+    {
+      "name": "Giới thiệu nhân sự",
+      "description": "Từ 15g30, các thành viên ca đoàn đã có mặt để chuẩn bị cho Thánh lễ, trang trí và sắp xếp phụng vụ. Đúng 18g00, Thánh lễ được cử hành trọng thể do cha Giuse Hoàng Quang Trung chủ tế, với sự tham dự của quý Sơ, Hội đồng Mục vụ, các hội đoàn và đông đảo cộng đoàn Dân Chúa.."
+    },
+    {
+      "name": "Tường thuật sự kiện Thánh lễ",
+      "description": "Thánh lễ khép lại trong niềm vui tạ ơn và phép lành bình an. Sau đó, cộng đoàn cùng chia sẻ niềm vui trong bữa tiệc mừng và chương trình văn nghệ vui, quy tụ nhiều thành phần dân Chúa trong giáo xứ."
+    },
+    {
+      "name": "Tường thuật sự kiện ngoài Thánh lễ",
+      "description": "Sau Thánh lễ, vào lúc 19g00, ca đoàn cùng quý Cha và các ban ngành tham dự bữa tiệc mừng trong bầu khí vui tươi, thân tình và hiệp thông."
+    },
+    {
+      "name": "Tường thuật sự kiện – Bài giảng",
+      "description": "Trong bài giảng, cha Giuse mời gọi ca đoàn noi gương Thánh Faustina – tông đồ của Lòng Chúa Thương Xót, sống đức tin khiêm nhường, hiệp nhất và phục vụ. Cha cầu chúc cho các ca viên luôn bình an, nhiệt thành phụng sự Chúa, để lời ca tiếng hát trở thành lời cầu nguyện sống động dâng lên Thiên Chúa."
+    },
+    {
+      "name": "Kết từ",
+      "description": "Ngày lễ khép lại trong tâm tình tạ ơn, để mỗi ca viên thêm xác tín sứ mạng “hát hay – sống tốt”, góp phần làm đẹp hơn cho phụng vụ và đời sống Đức tin của cộng đoàn Giáo điểm Uyên Hưng."
+    }
+  ]
+}
