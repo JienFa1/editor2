@@ -1,38 +1,63 @@
 # -*- coding: utf-8 -*-
 """
-editor_pipeline/export.py — Lưu CHỈ final_text ra file .txt
-- Không lưu audit.
+Helper functions to persist pipeline outputs (text or DOCX).
 """
 
-import os  # thao tác thư mục/đường dẫn
-from typing import Optional
+import os
+from typing import Mapping
+
+from docx import Document
 
 
-def save_final_text_txt(final_text: str, out_path: str, *, encoding: str = "utf-8", ensure_trailing_newline: bool = True) -> str:
+def _ensure_parent_dir(path: str) -> None:
+    directory = os.path.dirname(path)
+    if directory:
+        os.makedirs(directory, exist_ok=True)
+
+
+def save_final_text_txt(
+    final_text: str,
+    out_path: str,
+    *,
+    encoding: str = "utf-8",
+    ensure_trailing_newline: bool = True,
+) -> str:
     """
-    Ghi CHỈ final_text ra một file .txt.
-
-    Args:
-        final_text: Chuỗi văn bản sau biên tập (đã ghép từ các chunk).
-        out_path : Đường dẫn file .txt cần lưu (vd: './outputs/result.txt').
-        encoding : Mã hoá file, mặc định 'utf-8'.
-        ensure_trailing_newline: Nếu True, đảm bảo có newline ở cuối file (thân thiện POSIX).
-
-    Returns:
-        str: Đường dẫn file vừa ghi (out_path).
+    Write final_text into a plain-text file.
     """
-    # Tạo thư mục đích nếu cần (nếu out_path có chứa folder)
-    out_dir = os.path.dirname(out_path)
-    if out_dir:
-        os.makedirs(out_dir, exist_ok=True)
-
-    # Nội dung cần ghi
+    _ensure_parent_dir(out_path)
     content: str = final_text or ""
     if ensure_trailing_newline and (not content.endswith("\n")):
         content = content + "\n"
+    with open(out_path, "w", encoding=encoding) as handle:
+        handle.write(content)
+    return out_path
 
-    # Ghi file văn bản
-    with open(out_path, "w", encoding=encoding) as f:
-        f.write(content)
 
+def save_document_with_edits(
+    document: Document,
+    paragraph_updates: Mapping[int, str],
+    out_path: str,
+) -> str:
+    """
+    Save a DOCX file after updating paragraph text while keeping images/layout.
+
+    Args:
+        document: python-docx Document already loaded (images/styles are intact).
+        paragraph_updates: mapping docx paragraph index -> new text.
+        out_path: destination DOCX path.
+    """
+    if not isinstance(paragraph_updates, Mapping):
+        raise TypeError("paragraph_updates must be a mapping from paragraph index to text.")
+
+    for idx, new_text in paragraph_updates.items():
+        if not isinstance(idx, int):
+            raise TypeError("Paragraph index must be an integer.")
+        if idx < 0 or idx >= len(document.paragraphs):
+            raise ValueError(f"Paragraph index out of range: {idx}")
+        paragraph = document.paragraphs[idx]
+        paragraph.text = (new_text or "").strip()
+
+    _ensure_parent_dir(out_path)
+    document.save(out_path)
     return out_path

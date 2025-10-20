@@ -15,7 +15,7 @@ config.py — cấu hình dùng lại 'compose'
 
 # === Document hiện hành (gán ở runtime) ===
 
-DOCUMENT =   r"C:\Users\TRUYENTHONG\Desktop\finetune\editor\data\test_open_20251017T083054Z.docx"
+DOCUMENT =   r"C:\Users\TRUYENTHONG\Desktop\finetune\editor\data\01-B_n_g_c-M_NG_L__T_NG_L_NH_THI_N_TH_N_MICAE_20251016T034847Z.docx"
 
 # === Semantic label index (finetune-v2) ===
 _MODULE_DIR = Path(__file__).resolve().parent
@@ -24,7 +24,7 @@ SEMANTIC_INDEX_DIR = _PROJECT_ROOT / "semantic_index"
 FAISS_INDEX_PATH = SEMANTIC_INDEX_DIR / "label_index.faiss"
 FAISS_METADATA_PATH = SEMANTIC_INDEX_DIR / "label_index_meta.json"
 LABEL_DESCRIPTIONS_PATH = SEMANTIC_INDEX_DIR / "label_descriptions.json"
-EMBEDDING_MODEL_NAME = "AITeamVN/Vietnamese_Embedding"
+EMBEDDING_MODEL_NAME = "bkai-foundation-models/vietnamese-bi-encoder"
 # Ưu tiên GPU (CUDA); mã sẽ tự fallback về CPU nếu không khả dụng.
 EMBEDDING_DEVICE = "cuda"
 SIMILARITY_TOP_K = 1
@@ -128,7 +128,7 @@ REGISTRY_DICT = {
                 "Sửa lỗi chính tả, ngữ pháp, dấu câu, bỏ khoảng trắng hoặc dấu câu thừa, các lỗi đánh máy khác."
                 "Chuẩn hoá thời gian theo dạng: dd/mm/yyyy; giờ theo dạng hhgmm (ví dụ: 08g00, 16g30)."
                 "quy tắc viết hoa cho danh xưng hoặc chức vụ hoặc đơn vị và thuật ngữ phụng vụ; chuẩn hóa tên dòng tu; dấu câu chặt chẽ."
-                "Tên tổ chức hoặc đơn vị rõ ràng: viết đầy đủ (không viết tắt), giữ sự trang nghiêm. Nêu đầy đủ vai trò hoặc chức vụ và đơn vị chỉ khi có trong nguồn; không suy diễn thêm."
+                "Tên tổ chức hoặc đơn vị rõ ràng: viết đầy đủ (không viết tắt), giữ sự trang nghiêm."
                 "Tông trọng phẩm trật Công giáo"
                 "giữ nguyên các dữ kiện định lượng (nếu nguồn có số cụ thể thì giữ nguyên số, không thay bằng diễn đạt mơ hồ); không mở rộng phạm vi người hoặc đơn vị  hoặc  thêm tập thể mới khi nguồn không nêu."
                 "không lược bỏ các dữ kiện cốt lõi (nhất là người chủ sự, số lượng, đối tượng cầu nguyện)."
@@ -465,23 +465,23 @@ REGISTRY_DICT = {
         },
         {
             "label_key": "mo_bai_tom_tat_thanh_le",
-            "edit_prompt_ids": ["EP_STRUC_LEAD", "EP_LEAD_HOI_DOAN_TONE", "EP_LEAD_HOI_DOAN_WORD","EP_LEAD_HOI_DOAN_AIM", "EP_CHUAN_HOA"]
+            "edit_prompt_ids": ["EP_STRUC_LEAD", "EP_STYLE_TONE", "EP_STYLE_TONE_TLTA", "EP_STYLE_TONE_TLKNKD", "EP_WORD_LEAD","EP_LEAD_HOI_DOAN_AIM", "EP_CHUAN_HOA"]
         },
         {
             "label_key": "tuong_thuat_su_kien_bai_giang",
-            "edit_prompt_ids": ["EP_BAI_GIANG_STRUC", "EP_BAI_GIANG_TONE", "EP_BAI_GIANG_WORD", "EP_BAI_GIANG_AIM", "EP_CHUAN_HOA", "EP_BAI_GIANG_CHECK"]
+            "edit_prompt_ids": ["EP_BAI_GIANG_STRUC", "EP_STYLE_TONE","EP_STYLE_TONE_TLTA", "EP_STYLE_TONE_TLKNKD", "EP_BAI_GIANG_WORD", "EP_BAI_GIANG_AIM", "EP_CHUAN_HOA", "EP_BAI_GIANG_CHECK"]
         },
         {
             "label_key": "tuong_thuat_su_kien_thanh_le",
-            "edit_prompt_ids": ["EP_REPORT_THANH_LE_STRUC", "EP_REPORT_THANH_LE_TONE", "EP_REPORT_THANH_LE_WORD",  "EP_REPORT_THANH_LE_AIM", "EP_CHUAN_HOA", "EP_REPORT_THANH_LE_CHECK"]
+            "edit_prompt_ids": ["EP_REPORT_THANH_LE_STRUC", "EP_STYLE_TONE", "EP_STYLE_TONE_TLTA", "EP_STYLE_TONE_TLKNKD", "EP_WORD_LEAD",  "EP_REPORT_THANH_LE_AIM", "EP_CHUAN_HOA", "EP_REPORT_THANH_LE_CHECK"]
         },
          {
             "label_key": "tuong_thuat_su_kien_ngoai_thanh_le",
-            "edit_prompt_ids": ["EP_REPORT_THANH_LE_STRUC", "EP_REPORT_THANH_LE_TONE", "EP_REPORT_THANH_LE_WORD", "EP_REPORT_THANH_LE_AIM", "EP_CHUAN_HOA", "EP_REPORT_THANH_LE_CHECK"]
+            "edit_prompt_ids": ["EP_REPORT_THANH_LE_STRUC", "EP_STYLE_TONE", "EP_STYLE_TONE_TLTA", "EP_STYLE_TONE_TLKNKD", "EP_WORD_LEAD", "EP_REPORT_THANH_LE_AIM", "EP_CHUAN_HOA", "EP_REPORT_THANH_LE_CHECK"]
         },
         {
             "label_key": "ket_tu_tuong_thuat_thanh_le",
-            "edit_prompt_ids": ["EP_END_THANH_LE_STRUC", "EP_END_THANH_LE_TONE", "EP_END_THANH_LE_WORD", "EP_END_THANH_LE_AIM", "EP_CHUAN_HOA", "EP_END_THANH_LE_CHECK"]
+            "edit_prompt_ids": ["EP_END_THANH_LE_STRUC", "EP_STYLE_TONE", "EP_STYLE_TONE_TLTA", "EP_STYLE_TONE_TLKNKD", "EP_WORD_LEAD", "EP_END_THANH_LE_AIM", "EP_CHUAN_HOA", "EP_END_THANH_LE_CHECK"]
         },
         # {
         #     "label_key": "thong_bao_muc_vu_khan_dong",
@@ -489,7 +489,7 @@ REGISTRY_DICT = {
         # },
         {
             "label_key": "gioi_thieu_nhan_su",
-            "edit_prompt_ids": ["EP_PROFILE_HOI_DOAN_STRUC", "EP_PROFILE_HOI_DOAN_TONE","EP_PROFILE_HOI_DOAN_WORD", "EP_PROFILE_ALL_AIM", "EP_CHUAN_HOA"]
+            "edit_prompt_ids": ["EP_PROFILE_HOI_DOAN_STRUC", "EP_STYLE_TONE", "EP_STYLE_TONE_TLTA", "EP_STYLE_TONE_TLKNKD", "EP_WORD_LEAD", "EP_PROFILE_ALL_AIM", "EP_CHUAN_HOA"]
         },
         # {
         #     "label_key": "tuong_thuat_su_kien",
@@ -525,12 +525,16 @@ REGISTRY_DICT = {
             "EP_BAI_GIANG_STRUC",
             "EP_REPORT_THANH_LE_STRUC",
             "EP_END_THANH_LE_STRUC",
-            "EP_PROFILE_HOI_DOAN_STRUC",    
+            "EP_PROFILE_HOI_DOAN_STRUC", 
+            "EP_STYLE_TONE",
+            "EP_STYLE_TONE_TLTA",
+            "EP_STYLE_TONE_TLKNKD",
             "EP_LEAD_HOI_DOAN_TONE",
             "EP_BAI_GIANG_TONE",
             "EP_REPORT_THANH_LE_TONE", 
             "EP_END_THANH_LE_TONE",
             "EP_PROFILE_HOI_DOAN_TONE",
+            "EP_WORD_LEAD"
             "EP_LEAD_HOI_DOAN_WORD",
             "EP_BAI_GIANG_WORD",
             "EP_REPORT_THANH_LE_WORD",

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "embedding_dim": 1024,
+  "embedding_dim": 768,
   "labels": [
     {
       "name": "tiêu đề",
@@ -8,7 +8,7 @@
     },
     {
       "name": "mở bài (LEAD tin tức mục vụ) - Thánh Lễ",
-      "description": "Uyên Hưng – Chúa Nhật, ngày 05.10.2025 – Hòa cùng niềm vui của Giáo Hội trong ngày kính trọng thể Đức Mẹ Mân Côi, Ca đoàn Giáo điểm Uyên Hưng long trọng mừng lễ Thánh Faustina, vị thánh được chọn làm quan thầy của ca đoàn, trong tâm tình tạ ơn và hiệp thông sâu sắc."
+      "description": "Vào lúc 09g30, thứ Bảy, ngày 30/08/2025, trong bầu khí hân hoan và trang nghiêm, cộng đoàn Giáo xứ Hưng Hoà đã cùng nhau hiệp dâng Thánh lễ Tạ ơn nhân dịp khánh thành Tháp Chuông và Nhà Chờ Phục Sinh – hai công trình ý nghĩa, đánh dấu một bước ngoặt quan trọng trong hành trình đức tin của giáo xứ."
     },
     {
       "name": "Giới thiệu nhân sự",

@@ -1,0 +1,73 @@
+123{
+  "status": "done",
+  "elapsed_sec": 140.79,
+  "result": {
+    "final_text": "MƯNG LỄ KIẾN TỔNG LÃNH THIÊN THẦN MICAE – BỔN MẠNG GIÁO KHU MICAE (GIÁO KHU MICAE - GIÁO XỨ PHÚ LONG)\n\nTTSK đã tổ chức Thánh lễ bắt đầu lúc 18g00. Nghi thức khai mạc là rước kiệu Tổng lãnh Thiên Thần Micae, được trang trí bởi đội kèn tây giáo xứ và trình diễn nhạc kèn, nhằm tôn kính và biểu hiện sức mạnh chiến thắng của Thiên Thần Micae trong cuộc chiến với Luxiphe. Phần nhạc được dàn dựng bởi đội kèn tây giáo xứ, với khẩu hiệu “Ai bằng Thiên Chúa?”. Thánh lễ được thực hiện trong không khí hiệp thông, tràn ngập niềm vui thánh hiến và tinh thần tri ân, hân hoan.\n\nTtsk  \nTrong bầu khí sốt sắng, cộng đồng giáo xứ, đặc biệt giáo dân Giáo khu Micae, tụ tập tại nơi phụng vụ. Họ dâng lời tạ ơn Thiên Chúa và cầu nguyện hiệp thông. Đồng thời, họ kính nhớ thánh quan thầy Micae cùng hai tổng lãnh thiên thần Gabriel và Rafael.\n\nKTTT Lễ (Kỳ Tư Thánh Thánh Lễ). Ngày lễ bổn mạng khép lại trong niềm vui hiệp thông. Để lại nhiều dấu ấn đẹp về tình thân ái, gắn kết và tinh thần phục vụ trong cộng đoàn Giáo Khu và Giáo Xứ Phú Long. Các linh mục, thánh nhân và các thành viên trong cộng đồng đã dâng lên lời tri ân, nguyện cầu và cảm tạ, khép vụ trong niềm hân hoan, tạ ơn và khát vọng phát triển đời sống thánh thần trong Đức Thánh Cha.",
+    "audit": [
+      {
+        "chunk_id": "C1+C2+C3+C6+C7+C9",
+        "order": 1,
+        "labels": [
+          "tittle"
+        ],
+        "edit_prompt_ids": [
+          "EP_TITTLE"
+        ],
+        "latency_ms": 30076
+      },
+      {
+        "chunk_id": "C4",
+        "order": 4,
+        "labels": [
+          "gioi_thieu_nhan_su"
+        ],
+        "edit_prompt_ids": [
+          "EP_PROFILE_HOI_DOAN_STRUC",
+          "EP_STYLE_TONE",
+          "EP_STYLE_TONE_TLTA",
+          "EP_STYLE_TONE_TLKNKD",
+          "EP_CHUAN_HOA",
+          "EP_WORD_LEAD",
+          "EP_PROFILE_ALL_AIM"
+        ],
+        "latency_ms": 38205
+      },
+      {
+        "chunk_id": "C5",
+        "order": 5,
+        "labels": [
+          "tuong_thuat_su_kien_bai_giang"
+        ],
+        "edit_prompt_ids": [
+          "EP_BAI_GIANG_STRUC",
+          "EP_STYLE_TONE",
+          "EP_STYLE_TONE_TLTA",
+          "EP_STYLE_TONE_TLKNKD",
+          "EP_BAI_GIANG_WORD",
+          "EP_BAI_GIANG_AIM",
+          "EP_CHUAN_HOA",
+          "EP_BAI_GIANG_CHECK"
+        ],
+        "latency_ms": 15873
+      },
+      {
+        "chunk_id": "C8",
+        "order": 8,
+        "labels": [
+          "ket_tu_tuong_thuat_thanh_le"
+        ],
+        "edit_prompt_ids": [
+          "EP_END_THANH_LE_STRUC",
+          "EP_STYLE_TONE",
+          "EP_STYLE_TONE_TLTA",
+          "EP_STYLE_TONE_TLKNKD",
+          "EP_CHUAN_HOA",
+          "EP_END_THANH_LE_CHECK",
+          "EP_WORD_LEAD",
+          "EP_END_THANH_LE_AIM"
+        ],
+        "latency_ms": 50127
+      }
+    ]
+  }
+}

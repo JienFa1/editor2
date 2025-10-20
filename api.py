@@ -1,37 +1,36 @@
 # -*- coding: utf-8 -*-
 import sys
-sys.stdout.reconfigure(encoding="utf-8")
-sys.stderr.reconfigure(encoding="utf-8") 
 
-import os, json, uuid, time
-from typing import Optional, List
-from fastapi import FastAPI, HTTPException, BackgroundTasks, Response
+sys.stdout.reconfigure(encoding="utf-8")
+sys.stderr.reconfigure(encoding="utf-8")
+
+import json
+import os
+import time
+import uuid
+from pathlib import Path
+from typing import List, Optional, Tuple
+
+from fastapi import BackgroundTasks, FastAPI, HTTPException, Response
 from pydantic import BaseModel, Field
 import uvicorn
 
 from editor import Config
 from editor.Registry import PromptRegistry
-from editor.pipeline import EditorPipeline
+from editor.docx_load import ParagraphRecord, document_to_big_text_with_mapping
+from editor.export_local import save_document_with_edits
 from editor.llm import OpenAIChatLLM, OllamaChatLLM
-from editor.docx_load import document_to_big_text
+from editor.pipeline import EditorPipeline
 
-# --- Khá»Ÿi táº¡o FastAPI ---
-app = FastAPI(title="MucVu Editor Pipeline API", version="1.4.0")
-  
+from finetune_v2.docx_utils import build_paragraph_updates
 
-@app.get("/", include_in_schema=False)
-def read_root():
-    return {"status": "ok", "message": "Use POST /process to run the editor pipeline."}
+# --- FastAPI setup -------------------------------------------------------
+app = FastAPI(title="MucVu Editor Pipeline API", version="1.5.0")
 
 
-@app.get("/favicon.ico", include_in_schema=False)
-def favicon_placeholder():
-    return Response(status_code=204)
-
-# ====== Schemas ======
 class ProcessRequest(BaseModel):
-    big_text: Optional[str] = Field(None, description="chuỗi văn bản (đã ghép đoạn bằng \\n\\n).")
-    docx_path: Optional[str] = Field(None, description="Đường dẫn file .docx (nếu chưa ghép big_text).")
+    big_text: Optional[str] = Field(None, description="Chuoi van ban (da ghep doan bang \\n\\n).")
+    docx_path: Optional[str] = Field(None, description="Duong dan file .docx (neu chua ghep big_text).")
 
 
 class ChunkAudit(BaseModel):
@@ -45,24 +44,21 @@ class ChunkAudit(BaseModel):
 class ProcessResponse(BaseModel):
     final_text: str
     audit: List[ChunkAudit]
+    docx_path: Optional[str] = Field(None, description="Duong dan file DOCX da duoc chinh sua.")
 
 
 class ProcessTextResponse(BaseModel):
     final_text: str
 
 
-# ====== Helper: Tạo 1 LLM duy nháº¥t theo Config.py ======
-def _make_llm_from_Config():
-    """Chọn LLM từ Config.py."""
+def _make_llm_from_config():
     if getattr(Config, "USE_OLLAMA", True):
-        # Dùng Ollama cho cả classifier + editor
         return OllamaChatLLM(
             model=Config.OLLAMA_MODEL,
             api_url=Config.OLLAMA_API_URL,
         )
-    # hoặc dùng OpenAI
     if not getattr(Config, "OPENAI_API_KEY", ""):
-        raise HTTPException(status_code=400, detail="OPENAI_API_KEY chưa có trong Config.py.")
+        raise HTTPException(status_code=400, detail="OPENAI_API_KEY chua co trong Config.py.")
     return OpenAIChatLLM(
         model=Config.OPENAI_MODEL,
         api_key=Config.OPENAI_API_KEY,
@@ -70,32 +66,60 @@ def _make_llm_from_Config():
     )
 
 
+def _resolve_docx_context(docx_path: Optional[str]) -> Tuple[str, Optional[Path], Optional[Tuple[object, List[ParagraphRecord]]]]:
+    if docx_path and docx_path.strip():
+        target = Path(docx_path.strip()).expanduser().resolve()
+        Config.DOCUMENT = str(target)
+    else:
+        default_doc = getattr(Config, "DOCUMENT", "").strip()
+        if not default_doc:
+            return "", None, None
+        Config.DOCUMENT = default_doc
+        target = Path(default_doc).expanduser().resolve()
+
+    try:
+        big_text, document, paragraphs = document_to_big_text_with_mapping()
+    except Exception as exc:  # noqa: BLE001
+        raise HTTPException(status_code=400, detail=f"Loi doc .docx: {exc}") from exc
+
+    return big_text, Path(Config.DOCUMENT), (document, paragraphs)
+
+
 def _run_pipeline(big_text: Optional[str], docx_path: Optional[str]) -> ProcessResponse:
+    document_context: Optional[Tuple[object, List[ParagraphRecord]]] = None
+    docx_output_path: Optional[Path] = None
+
     if big_text and big_text.strip():
         working_text = big_text.strip()
-    elif docx_path and docx_path.strip():
-        Config.DOCUMENT = docx_path.strip()
-        try:
-            working_text = document_to_big_text()
-        except Exception as e:
-            raise HTTPException(status_code=400, detail=f"Loi doc .docx: {e}")
     else:
-        raise HTTPException(status_code=400, detail="Thieu dau vao. Can 'big_text' hoac 'docx_path'.")
+        working_text, resolved_path, context = _resolve_docx_context(docx_path)
+        if not working_text:
+            raise HTTPException(status_code=400, detail="Thieu dau vao. Can 'big_text' hoac 'docx_path'.")
+        document_context = context
+        if resolved_path is not None:
+            Config.DOCUMENT = str(resolved_path)
 
     registry = PromptRegistry.from_dict(Config.REGISTRY_DICT)
 
     try:
-        llm = _make_llm_from_Config()
+        llm = _make_llm_from_config()
     except HTTPException:
         raise
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=f"Loi khoi tao LLM: {e}")
+    except Exception as exc:  # noqa: BLE001
+        raise HTTPException(status_code=400, detail=f"Loi khoi tao LLM: {exc}") from exc
 
-    pipe = EditorPipeline(classifier_llm=llm, editor_llm=llm, registry=registry)
+    pipeline = EditorPipeline(classifier_llm=llm, editor_llm=llm, registry=registry)
+
     try:
-        final_text, results = pipe.process(working_text)
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Loi khi xu ly pipeline: {e}")
+        final_text, results = pipeline.process(working_text)
+    except Exception as exc:  # noqa: BLE001
+        raise HTTPException(status_code=500, detail=f"Loi khi xu ly pipeline: {exc}") from exc
+
+    if document_context is not None:
+        document, paragraphs = document_context
+        paragraph_updates = build_paragraph_updates(results, paragraphs)
+        docx_output_path = Path("outputs/result_v1.docx").resolve()
+        save_document_with_edits(document, paragraph_updates, out_path=str(docx_output_path))
 
     audit = [
         ChunkAudit(
@@ -107,26 +131,30 @@ def _run_pipeline(big_text: Optional[str], docx_path: Optional[str]) -> ProcessR
         )
         for r in results
     ]
-    return ProcessResponse(final_text=final_text, audit=audit)
+    return ProcessResponse(
+        final_text=final_text,
+        audit=audit,
+        docx_path=str(docx_output_path) if docx_output_path else None,
+    )
 
-# ================= Background job ================ #
+
 def run_default_pipeline_and_save(job_id: str):
     try:
         start = time.time()
         default_doc = getattr(Config, "DOCUMENT", "").strip()
         if not default_doc:
-            raise Exception("Config.DOCUMENT chưa được cấu hình.")
+            raise RuntimeError("Config.DOCUMENT chua duoc cau hinh.")
         result = _run_pipeline(None, default_doc)
         elapsed = round(time.time() - start, 2)
         data = {"status": "done", "elapsed_sec": elapsed, "result": result.dict()}
-    except Exception as e:
-        data = {"status": "error", "message": str(e)}
+    except Exception as exc:  # noqa: BLE001
+        data = {"status": "error", "message": str(exc)}
 
     os.makedirs("jobs", exist_ok=True)
-    with open(f"jobs/{job_id}.json", "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
+    with open(f"jobs/{job_id}.json", "w", encoding="utf-8") as handle:
+        json.dump(data, handle, ensure_ascii=False, indent=2)
 
-# ====== Endpoints ======
+
 @app.get("/", include_in_schema=False)
 def read_root():
     default_doc = getattr(Config, "DOCUMENT", "").strip()
@@ -158,28 +186,29 @@ def process_default():
 def process_default_async(background_tasks: BackgroundTasks):
     default_doc = getattr(Config, "DOCUMENT", "").strip()
     if not default_doc:
-        raise HTTPException(status_code=400, detail="Config.DOCUMENT chưa được cấu hình.")
+        raise HTTPException(status_code=400, detail="Config.DOCUMENT chua duoc cau hinh.")
 
     job_id = str(uuid.uuid4())
     background_tasks.add_task(run_default_pipeline_and_save, job_id)
     return {"job_id": job_id, "status": "processing"}
 
+
 @app.get("/result/{job_id}")
 def get_result(job_id: str):
-    path = f"jobs/{job_id}.json"
-    if not os.path.exists(path):
+    path = Path("jobs") / f"{job_id}.json"
+    if not path.exists():
         return {"status": "processing"}
-    with open(path, "r", encoding="utf-8") as f:
-        return json.load(f)
+    with path.open("r", encoding="utf-8") as handle:
+        return json.load(handle)
 
 
 @app.get("/result/{job_id}/text")
 def get_result_text(job_id: str):
-    path = f"jobs/{job_id}.json"
-    if not os.path.exists(path):
+    path = Path("jobs") / f"{job_id}.json"
+    if not path.exists():
         return Response(content="processing", media_type="text/plain", status_code=202)
-    with open(path, "r", encoding="utf-8") as f:
-        data = json.load(f)
+    with path.open("r", encoding="utf-8") as handle:
+        data = json.load(handle)
     status = data.get("status")
     if status != "done":
         message = data.get("message", "")
@@ -191,10 +220,5 @@ def get_result_text(job_id: str):
     return Response(content=str(final_text), media_type="text/plain")
 
 
-#  python api.py
 if __name__ == "__main__":
     uvicorn.run("api:app", host="0.0.0.0", port=8000, reload=False)
-
-
-
-
